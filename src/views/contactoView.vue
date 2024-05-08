@@ -25,7 +25,7 @@
             <div class="row px-3 pb-2">
                 <div class="col-sm-4 text-center mb-3">
                     <i class="fa fa-2x fa-globe mb-3 text-primary"></i>
-                    <h4 class="font-weight-bold">Email</h4>
+                    <h4 class="font-weight-bold">Website</h4>
                     <p>www.rene.com</p>
                 </div>
                 <div class="col-sm-4 text-center mb-3">
@@ -36,35 +36,35 @@
                 <div class="col-sm-4 text-center mb-3">
                     <i class="far fa-2x fa-envelope mb-3 text-primary"></i>
                     <h4 class="font-weight-bold">Email</h4>
-                    <p>info@example.com</p>
+                    <p>rene.mareno@hamiloes.cool</p>
                 </div>
             </div>
             <div class="col-md-12 pb-5">
                 <div class="contact-form">
-                    <div class="alert alert-success">Mensaje enviado correctamente</div>
+                    <div v-show="enviado == true" class="alert alert-success">Mensaje enviado correctamente</div>
                     <div class="control-group">
-                        <input type="text" v-model="nombre" class="form-control" id="name"
+                        <input v-model="nombre" type="text" class="form-control"
                             placeholder="Ingresa tu nombre" required="required"
                             data-validation-required-message="Please enter your name" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <input type="email" v-model="email" class="form-control" id="email" placeholder="Your Email"
+                        <input type="email" v-model="email" class="form-control" placeholder="Ingresa tu Email"
                             required="required" data-validation-required-message="Please enter your email" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <input type="text" v-model="asunto" class="form-control" id="subject" placeholder="Subject"
+                        <input type="text" v-model="asunto" class="form-control" placeholder="Asunto"
                             required="required" data-validation-required-message="Please enter a subject" />
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
-                        <textarea class="form-control" v-model="mensaje" rows="8" id="message" placeholder="Message"
+                        <textarea v-model="mensaje" class="form-control" rows="8" id="message" placeholder="Escribe tu mensaje"
                             required="required" data-validation-required-message="Please enter your message"></textarea>
                         <p class="help-block text-danger"></p>
                     </div>
                     <div>
-                        <button class="btn btn-primary" type="submit" id="sendMessageButton">Send Message</button>
+                        <button @click="enviarMensaje()" class="btn btn-primary" type="submit" id="sendMessageButton">Enviar mensaje</button>
                     </div>
                 </div>
             </div>
@@ -73,20 +73,52 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
 import { ref } from 'vue';
 export default {
     setup() {
-        const enviado = ref(true);
+        const enviado = ref(false);
         const nombre = ref('');
         const email = ref('');
         const asunto = ref('');
         const mensaje = ref('');
+        const urlBase = "http://hamiloblog.test/api";
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        const enviarMensaje = async () => {
+            if(nombre.value == '' && email.value == '' && asunto.value == '' && mensaje.value ==''){
+                alert('Todos los campos son requeridos');
+                return;
+            }
+            try {
+                const {data} = await axios.post(urlBase + '/contactos', {
+                    nombre: nombre.value,
+                    email: email.value,
+                    asunto: asunto.value,
+                    mensaje: mensaje.value
+                }, {headers});
+                enviado.value = true;
+                setTimeout(() =>{
+                    enviado.value = false;
+                    nombre.value = '';
+                    email.value = '';
+                    asunto.value = '';
+                    mensaje.value = '';
+                }, 2000)
+            } catch (error) {
+                console.log(error)
+            }
+        }
         return {
             enviado,
             nombre,
             email,
             asunto,
             mensaje,
+            enviarMensaje
         }
     }
 }

@@ -89,7 +89,7 @@
             <button type="button" @click="enviarComentario()" class="btn btn-primary">Enviar comentario</button>
           </div>
         </div>
-        <div class="col-12">
+        <div v-else class="col-12">
           <p>Registrate o inicia sesion: </p>
           <router-link to="/auth" class="btn btn-primary">Ingresar</router-link>
         </div>
@@ -114,7 +114,6 @@ export default {
     const comentario = ref('')
     
     onMounted(() => {
-      //console.log(idPost);
       localStorage.setItem('ultimoPost', idPost)
       obtenerDatos();
     });

@@ -4,7 +4,7 @@
             <img class="mx-auto d-block w-75 bg-primary img-fluid rounded-circle mb-4 p-3" src="/persona.jpg" alt="Image">
             <h1 class="font-weight-bold">{{ nombre }}</h1>
             <p class="mb-4">
-                Justo stet no accusam stet invidunt sanctus magna clita vero eirmod, sit sit labore dolores lorem. Lorem at sit dolor dolores sed diam justo
+                Bien venido a mi blog personal, espero que te guste y encuentres infomacion util para tus proyectos.
             </p>
             <div class="d-flex justify-content-center mb-5">
                 <a class="btn btn-outline-primary mr-2" href="#"><i class="fab fa-twitter"></i></a>
