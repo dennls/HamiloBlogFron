@@ -54,6 +54,11 @@
                         <p class="help-block text-danger"></p>
                     </div>
                     <div class="control-group">
+                        <input type="text" v-model="telefono" class="form-control" placeholder="Ingresa tu numero telefonico"
+                            required="required" data-validation-required-message="Please enter your phone" />
+                        <p class="help-block text-danger"></p>
+                    </div>
+                    <div class="control-group">
                         <input type="text" v-model="asunto" class="form-control" placeholder="Asunto"
                             required="required" data-validation-required-message="Please enter a subject" />
                         <p class="help-block text-danger"></p>
@@ -80,6 +85,7 @@ export default {
         const enviado = ref(false);
         const nombre = ref('');
         const email = ref('');
+        const telefono = ref('');
         const asunto = ref('');
         const mensaje = ref('');
         const urlBase = "http://hamiloblog.test/api";
@@ -89,7 +95,7 @@ export default {
         }
 
         const enviarMensaje = async () => {
-            if(nombre.value == '' && email.value == '' && asunto.value == '' && mensaje.value ==''){
+            if(nombre.value == '' || email.value == '' || asunto.value == '' || mensaje.value =='' || telefono.value == ''){
                 alert('Todos los campos son requeridos');
                 return;
             }
@@ -97,6 +103,7 @@ export default {
                 const {data} = await axios.post(urlBase + '/contactos', {
                     nombre: nombre.value,
                     email: email.value,
+                    telefono: telefono.value,
                     asunto: asunto.value,
                     mensaje: mensaje.value
                 }, {headers});
@@ -105,11 +112,18 @@ export default {
                     enviado.value = false;
                     nombre.value = '';
                     email.value = '';
+                    telefono.value = '',
                     asunto.value = '';
                     mensaje.value = '';
                 }, 2000)
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                console.log(error.response.data);                
+                let errores = '';
+                for(let item in error.response.data.errors){
+                    errores += error.response.data.errors[item] + '\n';
+                }
+                alert(errores);
             }
         }
         return {
@@ -118,6 +132,7 @@ export default {
             email,
             asunto,
             mensaje,
+            telefono,
             enviarMensaje
         }
     }
